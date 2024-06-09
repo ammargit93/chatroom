@@ -1,23 +1,35 @@
-import json
-
-from django.http import HttpResponse
+import pymongo
 from django.shortcuts import render, redirect
 import socket
-import json
 
-def open_json():
-    with open('messages.json', 'r') as f:
-        data = json.dump(f)
+# MongoDB connection
+client = pymongo.MongoClient("mongodb://localhost:27017/")
+db = client["chatroomDB"]
+collection = db["messages"]
 
+# Initialize collection with a document containing an empty list for messages
+def initialize_collection():
+    if collection.count_documents({}) == 0:
+        collection.insert_one({'messages': []})
 
+initialize_collection()
+
+# View function to handle chat messages
 def room(request):
-    messages = []
     if request.method == 'POST':
+        username = request.POST.get('username')
         message = request.POST.get('chat')
-        messages.append(message)
-        if message:
+        if username and message:
             clientsocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             clientsocket.connect(('localhost', 55555))
-            clientsocket.send(message.encode('utf-8'))
+            clientsocket.send(f"{username}: {message}".encode('utf-8'))
             clientsocket.close()
-    return render(request, 'room.html', {'messages.json' : messages})
+
+            collection.update_one({}, {'$push': {'messages': {'username': username, 'text': message}}})
+
+        return redirect('room')
+
+    # Retrieve messages from the collection
+    messages = collection.find_one({})['messages']
+
+    return render(request, 'room.html', {'messages': messages})
