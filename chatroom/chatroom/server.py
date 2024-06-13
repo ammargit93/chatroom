@@ -38,7 +38,9 @@ try:
         clients.append(clientsocket)
         thread = threading.Thread(target=handle, args=(clientsocket,))
         thread.start()
+
 except KeyboardInterrupt:
     print('Server is shutting down...')
+
 finally:
     serversocket.close()

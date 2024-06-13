@@ -58,14 +58,12 @@
 <body>
     <div class="container">
         <div class="message-window">
-            <!-- Messages will be displayed here -->
             {% for message in messages %}
                 <p>{{ message.username }}: {{ message.text }}</p>
             {% endfor %}
         </div>
-        <form action="{% url 'room' %}" method="post" name="chat">
+        <form action="" method="post" name="chat">
             {% csrf_token %}
-            <input type="text" class="username-input" placeholder="Enter your username..." name="username">
             <input type="text" class="message-input" placeholder="Type your message..." name="chat">
             <button type="submit" class="send-button">Send</button>
         </form>

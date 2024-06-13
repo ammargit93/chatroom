@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatroom App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            width: 80%;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+        }
+        .left-side, .right-side {
+            width: 45%;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        input[type="text"], input[type="submit"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        .no-rooms, .room-list {
+            text-align: center;
+            color: #888;
+            font-size: 1.2em;
+        }
+        .room-list ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .room-list li {
+            margin: 5px 0;
+        }
+        .room-list a {
+            text-decoration: none;
+            color: #007bff;
+        }
+        .room-list a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="left-side">
+            <h1>Chatrooms</h1>
+            {% if not rooms %}
+                <div class="no-rooms">
+                    No rooms created
+                </div>
+            {% else %}
+                <div class="room-list">
+                    <ul>
+                        {% for room in rooms %}
+                            <li><a href="{% url 'room' room.id %}">{{ room.room_name }} (ID: {{ room.id }})</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+        </div>
+        <div class="right-side">
+            <h1>Create a Chatroom</h1>
+            <form action="{% url 'join' %}" method="POST">
+                {% csrf_token %}
+                <label for="room_name">Chatroom Name:</label>
+                <input type="text" id="room_name" name="room_name" required>
+                <input type="submit" value="Create Chatroom">
+            </form>
+        </div>
+    </div>
+</body>
+</html>

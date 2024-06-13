@@ -21,5 +21,7 @@ from . import views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", views.room, name='room'),
+    path("", views.register, name='register'),
+    path("join/", views.join, name='join'),
+    path('room/<str:room_id>/', views.room, name='room'),
 ]
