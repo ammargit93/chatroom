@@ -30,6 +30,13 @@
             border-radius: 5px;
         }
 
+        .message-window p {
+            margin: 0;
+            padding: 0;
+            line-height: 1.2;
+            word-wrap: break-word;
+        }
+
         .message-input, .username-input {
             width: calc(100% - 22px);
             padding: 10px;
@@ -53,6 +60,33 @@
         .send-button:hover {
             background-color: #0056b3;
         }
+
+        .file-upload-wrapper {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .file-upload-icon {
+            display: inline-block;
+            cursor: pointer;
+            font-size: 24px;
+            color: #007bff;
+            margin-right: 10px;
+        }
+
+        .file-upload-icon:hover {
+            color: #0056b3;
+        }
+
+        #file-input {
+            display: none;
+        }
+
+        .file-upload-icon svg {
+            width: 24px;
+            height: 24px;
+        }
     </style>
 </head>
 <body>
@@ -62,8 +96,16 @@
                 <p>{{ message.username }}: {{ message.text }}</p>
             {% endfor %}
         </div>
-        <form action="" method="post" name="chat">
+        <form action="" method="post" name="chat" enctype="multipart/form-data">
             {% csrf_token %}
+            <div class="file-upload-wrapper">
+                <label for="file-input" class="file-upload-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.343 6.343a4 4 0 105.657 5.657L21 13.657m0 0V7m0 0h-6.657"/>
+                    </svg>
+                </label>
+                <input type="file" id="file-input" name="file">
+            </div>
             <input type="text" class="message-input" placeholder="Type your message..." name="chat">
             <button type="submit" class="send-button">Send</button>
         </form>
